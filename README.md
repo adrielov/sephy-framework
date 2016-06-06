@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/github/sikamy/sephy-framework/badge.svg?branch=master)](https://coveralls.io/github/sikamy/sephy-framework?branch=master)
+
 # Sephy-Simple-PHP-Framework
 A simple php framework using MVC structure and components of Symfony and Illuminate.
 
