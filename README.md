@@ -44,4 +44,4 @@ $router->group(['middleware' => ['auth']], function (Core\Router $router) {
 
 ## Authors
 
-* **Adriel Oliveira** - [PurpleBooth](https://github.com/sikamy) - [Adriel OV](http://adrielov.com.br)
+* **Adriel Oliveira** - [Sikamy](https://github.com/sikamy) - [Adriel OV](http://adrielov.com.br)
