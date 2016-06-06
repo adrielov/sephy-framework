@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'auth' => [
-		'\App\Middlewares\AuthMiddleware',
-	]
+    'auth' => [
+        '\App\Middlewares\AuthMiddleware',
+    ],
 ];

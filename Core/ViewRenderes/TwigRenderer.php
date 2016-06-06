@@ -1,5 +1,7 @@
 <?php
+
 namespace Core\ViewRenderes;
+
 /**
  * -------------------------------------------------------------
  * TwigRenderer
