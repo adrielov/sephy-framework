@@ -12,8 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class Application
 {
-
-    public $capsuleDb = array();
+    public $capsuleDb = [];
     public $cache , $session;
     private static $instance;
 
@@ -21,7 +20,7 @@ class Application
     {
         $this->capsuleDb = new Capsule();
         $this->capsuleDb->addConnection(Config::get('database.providers.pdo'));
-        $this->capsuleDb->setEventDispatcher(new Dispatcher(new Container));
+        $this->capsuleDb->setEventDispatcher(new Dispatcher(new Container()));
         $this->session = new Session();
         $this->capsuleDb->bootEloquent();
         $this->capsuleDb->setAsGlobal();
@@ -33,9 +32,8 @@ class Application
      */
     public static function getInstance()
     {
-
         if (!isset(self::$instance)) {
-            self::$instance = new Application();
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -64,18 +62,17 @@ class Application
      */
     public function redirect($url)
     {
-        $url = str_replace(".", DS, $url);
-        return header('location: /' . $url);
+        $url = str_replace('.', DS, $url);
+
+        return header('location: /'.$url);
     }
 
-
-	/**
+    /**
      * @return bool|\ReflectionMethod
      */
     public function run()
     {
         try {
-
             date_default_timezone_set(Config::get('app.timezone'));
             static::stripTraillingSlash();
 
@@ -88,36 +85,35 @@ class Application
             $this->handleMiddlewares($routerParams);
 
 
-            $controllerParams = array();
+            $controllerParams = [];
             foreach ($routerParams as $paramName => $paramValue) {
-                if (substr($paramName, 0, 1) != "_") {
+                if (substr($paramName, 0, 1) != '_') {
                     $controllerParams[$paramName] = $paramValue;
                 }
             }
 
-            if (isset($routerParams["_params"]) && is_array($routerParams["_params"])) {
-                foreach ($routerParams["_params"] as $paramName => $paramValue) {
+            if (isset($routerParams['_params']) && is_array($routerParams['_params'])) {
+                foreach ($routerParams['_params'] as $paramName => $paramValue) {
                     $controllerParams[$paramName] = $paramValue;
                 }
             }
 
             if ($routerParams === false) {
-                $routerParams = Array('_controller' => 'Controller', '_method' => '_404', '_params' => Array());
-                $controllerFullName = "\\Core\\Lib\\" . $routerParams["_controller"];
+                $routerParams = ['_controller' => 'Controller', '_method' => '_404', '_params' => []];
+                $controllerFullName = '\\Core\\Lib\\'.$routerParams['_controller'];
             } else {
-                $controllerFullName = "\\App\\Controllers\\" . $routerParams["_controller"];
+                $controllerFullName = '\\App\\Controllers\\'.$routerParams['_controller'];
             }
 
 
-            if (!method_exists($controllerFullName, $routerParams["_method"])) {
-                die("Method {$routerParams["_method"]} not found");
+            if (!method_exists($controllerFullName, $routerParams['_method'])) {
+                die("Method {$routerParams['_method']} not found");
             }
 
-            $reflectionMethod = new \ReflectionMethod($controllerFullName, $routerParams["_method"]);
+            $reflectionMethod = new \ReflectionMethod($controllerFullName, $routerParams['_method']);
             $reflectionMethod->invokeArgs(new $controllerFullName(), $controllerParams);
 
             return $reflectionMethod;
-
         } catch (Exception $e) {
             new ExceptionHandler($e);
         }
@@ -125,13 +121,13 @@ class Application
         return true;
     }
 
-	/**
+    /**
      * @param $routerParams
      */
     private function handleMiddlewares($routerParams)
     {
         if (array_key_exists('_middleware', $routerParams)) {
-            $middlewaresList = array();
+            $middlewaresList = [];
             foreach ($routerParams['_middleware'] as $middlewareGroup) {
                 $configMiddleware = Config::get('middleware');
                 if (isset($configMiddleware[$middlewareGroup])) {
@@ -140,9 +136,9 @@ class Application
             }
 
             $middlewaresList = array_reverse($middlewaresList);
-            $middlewareObjects = array();
+            $middlewareObjects = [];
             $lastMiddleware = null;
-            
+
             foreach ($middlewaresList as $middleware) {
                 $md = new $middleware($lastMiddleware);
                 $middlewareObjects[] = $md;
@@ -158,11 +154,10 @@ class Application
 
     public static function stripTraillingSlash()
     {
-        $urlParts = explode("?", $_SERVER["REQUEST_URI"]);
-        if ($urlParts[0] != "/") {
-            $urlParts[0] = substr($urlParts[0], -1, 1) == "/" ? substr($urlParts[0], 0, -1) : $urlParts[0];
-            $_SERVER["REQUEST_URI"] = implode("?", $urlParts);
+        $urlParts = explode('?', $_SERVER['REQUEST_URI']);
+        if ($urlParts[0] != '/') {
+            $urlParts[0] = substr($urlParts[0], -1, 1) == '/' ? substr($urlParts[0], 0, -1) : $urlParts[0];
+            $_SERVER['REQUEST_URI'] = implode('?', $urlParts);
         }
     }
-
 }
