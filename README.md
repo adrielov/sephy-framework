@@ -1,4 +1,3 @@
-[![Coverage Status](https://coveralls.io/repos/github/sikamy/sephy-framework/badge.svg?branch=master)](https://coveralls.io/github/sikamy/sephy-framework?branch=master)
 [![StyleCI](https://styleci.io/repos/60484041/shield)](https://styleci.io/repos/60484041)
 
 # Sephy-Simple-PHP-Framework
