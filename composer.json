@@ -1,0 +1,30 @@
+{
+    "name": "sikamy/Sephy-Simple-PHP-Framework",
+    "description": "Simple PHP-Framework",
+    "authors": [
+        {
+            "name": "Adriel Oliveira",
+            "email": "developer@adrielov.com.br"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "App/",
+            "Core\\": "Core/"
+        }
+    },
+    "require": {
+        "philo/laravel-blade": "^3.1",
+        "illuminate/events": "^5.2",
+        "illuminate/database": "^5.2",
+        "illuminate/http": "^5.2",
+        "illuminate/session": "^5.2",
+        "illuminate/support": "^5.2",
+        "illuminate/cache": "^5.2",
+        "illuminate/Pagination": "^5.2",
+        "nesbot/carbon": "^1.21",
+        "swiftmailer/swiftmailer": "^5.4",
+        "volnix/csrf": "^1.2",
+        "symfony/routing": "^3.0"
+    }
+}
