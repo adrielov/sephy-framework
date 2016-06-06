@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: William
- * Date: 21/05/2016
- * Time: 11:59
- */
-
 namespace Core\Exceptions;
 
 use Exception;
+use Invoker\Exception\NotCallableException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class ExceptionHandler
 {
@@ -23,10 +18,12 @@ class ExceptionHandler
     public function handle()
     {
         if ($this->exception instanceof AuthException) {
-            die('Usuário deve estar logado');
-        } else if ($this->exception instanceof RoleException) {
-            die('Usuário não é do grupo' . $this->exception->getMessage());
-        } else {
+            die('User must be logged in');
+        }else if ($this->exception instanceof NotCallableException) {
+            die('Method not found');
+        } if ($this->exception instanceof MethodNotAllowedException) {
+            die('Not allowed');
+        }else {
             echo $this->exception->getMessage();
         }
     }

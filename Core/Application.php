@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Exceptions\ExceptionHandler;
+use DI\ContainerBuilder;
 use Exception;
 use Illuminate\Cache\CacheManager as CacheManager;
 use Illuminate\Container\Container;
@@ -14,18 +15,25 @@ class Application
 {
 
     public $capsuleDb = array();
-    public $cache , $session;
+    public $cache , $session , $di;
     private static $instance;
 
     public function __construct()
     {
-        $this->capsuleDb = new Capsule();
-        $this->capsuleDb->addConnection(Config::get('database.providers.pdo'));
-        $this->capsuleDb->setEventDispatcher(new Dispatcher(new Container));
+		$di_builder = new ContainerBuilder();
+		$di_builder->useAutowiring(true);
+		$this->di = $di_builder->build();
         $this->session = new Session();
-        $this->capsuleDb->bootEloquent();
-        $this->capsuleDb->setAsGlobal();
-        $this->db = $this->capsuleDb->getConnection();
+        try{
+           $this->capsuleDb = new Capsule();
+           $this->capsuleDb->addConnection(Config::get('database.providers.pdo'));
+           $this->capsuleDb->setEventDispatcher(new Dispatcher(new Container));
+           $this->capsuleDb->bootEloquent();
+           $this->capsuleDb->setAsGlobal();
+           $this->db = $this->capsuleDb->getConnection();
+       }catch (\PDOException $exc){
+           die("Database ".Config::get('database.providers.pdo.database')." not found");
+       }
     }
 
     /**
@@ -68,15 +76,15 @@ class Application
         return header('location: /' . $url);
     }
 
-
 	/**
-     * @return bool|\ReflectionMethod
-     */
-    public function run()
+	 * @return bool|mixed
+	 */
+	public function run()
     {
         try {
 
             date_default_timezone_set(Config::get('app.timezone'));
+
             static::stripTraillingSlash();
 
             $this->session()->start();
@@ -86,7 +94,6 @@ class Application
             $routerParams = Router::getParams();
 
             $this->handleMiddlewares($routerParams);
-
 
             $controllerParams = array();
             foreach ($routerParams as $paramName => $paramValue) {
@@ -100,23 +107,12 @@ class Application
                     $controllerParams[$paramName] = $paramValue;
                 }
             }
-
-            if ($routerParams === false) {
-                $routerParams = Array('_controller' => 'Controller', '_method' => '_404', '_params' => Array());
-                $controllerFullName = "\\Core\\Lib\\" . $routerParams["_controller"];
-            } else {
-                $controllerFullName = "\\App\\Controllers\\" . $routerParams["_controller"];
-            }
-
-
-            if (!method_exists($controllerFullName, $routerParams["_method"])) {
-                die("Method {$routerParams["_method"]} not found");
-            }
-
-            $reflectionMethod = new \ReflectionMethod($controllerFullName, $routerParams["_method"]);
-            $reflectionMethod->invokeArgs(new $controllerFullName(), $controllerParams);
-
-            return $reflectionMethod;
+			$controllerFullName = "\\App\\Controllers\\" . $routerParams["_controller"];
+			try{
+				return $this->di->call($controllerFullName."::".$routerParams["_method"], $controllerParams);
+			}catch (Exception $e){
+				new ExceptionHandler($e);
+			}
 
         } catch (Exception $e) {
             new ExceptionHandler($e);

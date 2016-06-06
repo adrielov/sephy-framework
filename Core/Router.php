@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Exceptions\ExceptionHandler;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -126,6 +128,7 @@ class Router
     {
         static::includeRoutes();
 
+		$parameters = null;
 		$context = new RequestContext();
 		$context->fromRequest(Request::createFromGlobals());
 		$matcher = new UrlMatcher(Router::getInstance()->routeColletion, $context);
@@ -139,10 +142,9 @@ class Router
 				'_method' => '_404',
 				'_route' => 'GETPOSTPUTPATCHDELETEPATCH/'
 			];
-		} catch (MethodNotAllowedException $e) {
-			die("Not allowed");
+		} catch (Exception $e){
+			new ExceptionHandler($e);
 		}
-
 		return $parameters;
     }
 	private static function includeRoutes()

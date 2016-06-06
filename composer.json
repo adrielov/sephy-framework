@@ -14,18 +14,19 @@
         }
     },
     "require": {
-        "illuminate/events": "^5.2",
-        "illuminate/database": "^5.2",
-        "illuminate/http": "^5.2",
-        "illuminate/session": "^5.2",
-        "illuminate/support": "^5.2",
-        "illuminate/cache": "^5.2",
-        "illuminate/view" : "4.*",
-        "illuminate/Pagination": "^5.2",
+	  	"windwalker/renderer": "^2.1",
+	  	"illuminate/events": "5.1.*",
+        "illuminate/database": "5.1.*",
+        "illuminate/http": "5.1.*",
+        "illuminate/session": "5.1.*",
+        "illuminate/support": "5.1.*",
+        "illuminate/cache": "5.1.*",
+        "illuminate/view" : "5.1.*",
+        "illuminate/Pagination": "5.1.*",
         "nesbot/carbon": "^1.21",
         "swiftmailer/swiftmailer": "^5.4",
+	  	"php-di/php-di": "5.1.*",
         "symfony/routing": "^3.0",
-        "twig/twig": "~1.0",
-        "windwalker/renderer": "^2.1"
+        "twig/twig": "~1.0"
     }
 }
