@@ -1,9 +1,11 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model {
-
+class User extends Model
+{
     /**
      * The table associated with the model.
      *
@@ -17,7 +19,4 @@ class User extends Model {
      * @var bool
      */
     public $timestamps = true;
-
 }
-
-?>
