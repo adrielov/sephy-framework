@@ -1,4 +1,5 @@
 <?php
+
 namespace Core\Exceptions;
 
 use Exception;
@@ -19,11 +20,12 @@ class ExceptionHandler
     {
         if ($this->exception instanceof AuthException) {
             die('User must be logged in');
-        }else if ($this->exception instanceof NotCallableException) {
+        } elseif ($this->exception instanceof NotCallableException) {
             die('Method not found');
-        } if ($this->exception instanceof MethodNotAllowedException) {
+        }
+        if ($this->exception instanceof MethodNotAllowedException) {
             die('Not allowed');
-        }else {
+        } else {
             echo $this->exception->getMessage();
         }
     }
