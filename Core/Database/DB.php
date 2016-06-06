@@ -5,7 +5,7 @@
  * Time: 01:06
  */
 
-namespace Core\Lib;
+namespace Core\Database;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DB extends Capsule

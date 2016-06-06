@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Lib;
+namespace Core\Database;
 
 use Core\Application;
 use Illuminate\Database\Migrations\Migration as MigrationDatabase;

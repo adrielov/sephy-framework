@@ -3,6 +3,8 @@
 namespace Core;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
@@ -118,19 +120,32 @@ class Router
     }
 
 	/**
-     * @return array
-     */
-    public static function getParams()
+	 * @return array
+	 */
+	public static function getParams()
     {
         static::includeRoutes();
-        $request = Request::createFromGlobals();
-        $requestContext = new RequestContext();
-        $requestContext = $requestContext->fromRequest($request);
-        $matcher = new UrlMatcher(Router::getInstance()->routeColletion, $requestContext);
-        return $matcher->matchRequest($request);
-    }
 
-    private static function includeRoutes()
+		$context = new RequestContext();
+		$context->fromRequest(Request::createFromGlobals());
+		$matcher = new UrlMatcher(Router::getInstance()->routeColletion, $context);
+
+		try {
+			$parameters = $matcher->match(Request::createFromGlobals()->getPathInfo());
+		} catch (ResourceNotFoundException $e) {
+			$parameters = [
+				'_path' => $_SERVER['REQUEST_URI'],
+				'_controller' => 'HomeController',
+				'_method' => '_404',
+				'_route' => 'GETPOSTPUTPATCHDELETEPATCH/'
+			];
+		} catch (MethodNotAllowedException $e) {
+			die("Not allowed");
+		}
+
+		return $parameters;
+    }
+	private static function includeRoutes()
     {
         static $included = false;
         if (!$included) {
@@ -139,14 +154,28 @@ class Router
         }
     }
 
-    public static function init()
+	/**
+	 * @return bool
+	 */
+	public static function init()
     {
         static $init = false;
         if (!$init) {
             Router::includeRoutes();
             $init = true;
         }
+		return $init;
     }
+
+	/**
+	 * Return router collection
+	 *
+	 * @return RouteCollection
+	 */
+	public function getCollection()
+	{
+		return $this->routeColletion;
+	}
 
 	/**
      * @param $params

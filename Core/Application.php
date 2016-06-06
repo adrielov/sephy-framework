@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use App\ExceptionHandler;
+use Core\Exceptions\ExceptionHandler;
 use Exception;
 use Illuminate\Cache\CacheManager as CacheManager;
 use Illuminate\Container\Container;
@@ -75,6 +75,8 @@ class Application
     public function run()
     {
         try {
+
+            date_default_timezone_set(Config::get('app.timezone'));
             static::stripTraillingSlash();
 
             $this->session()->start();
@@ -110,9 +112,12 @@ class Application
             if (!method_exists($controllerFullName, $routerParams["_method"])) {
                 die("Method {$routerParams["_method"]} not found");
             }
+
             $reflectionMethod = new \ReflectionMethod($controllerFullName, $routerParams["_method"]);
             $reflectionMethod->invokeArgs(new $controllerFullName(), $controllerParams);
+
             return $reflectionMethod;
+
         } catch (Exception $e) {
             new ExceptionHandler($e);
         }

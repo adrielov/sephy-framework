@@ -6,10 +6,9 @@ use App\Helpers\Utils;
 use Core\Application;
 use Core\Config;
 
+use Core\View;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request as Request;
-
-use Philo\Blade\Blade;
 
 class Controller extends Application
 {
@@ -24,38 +23,31 @@ class Controller extends Application
 	public function __construct() {
         parent::__construct();
 
-        $this->blade 	= new Blade(
-			Config::get('app.path_views'),
-			Config::get('app.path_views_cache')
-		);
-
         $this->framework= (object) Config::get('framework');
         $this->request 	= (new Request);
         $this->response	= (new Response);
     }
 
+
 	/**
-	 * @return int
+	 * @return View
 	 */
 	public function _404() {
-		return print($this->blade
-			->view()
-			->make("error.404")
-			->with('Utils',Utils::getInstance())
-            ->with('framework',$this->framework));
+		return $this->view("error.404");
 	}
 
-    /**
-     * @param      $view
-     * @param null $params
-     *
-     * @return int
-     */
-    public function view($view, $params = null) {
-        echo $this->blade->view()->make($view)
-            ->with($params)
-            ->with('useUtils',Utils::getInstance())
-            ->with('framework',$this->framework)->render();
+
+	/**
+	 * @param      $view
+	 * @param null $params
+	 *
+	 * @return View
+	 */
+	public function view($view, $params = null) {
+		$render = View::getInstance();
+		$render->render($view,$params);
+
+		return $render;
     }
 
 

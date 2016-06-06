@@ -1,5 +1,5 @@
 <?php
-namespace App\Helpers;
+namespace Core\Helpers;
 
 use Carbon\Carbon;
 use Core\Lib\Controller;

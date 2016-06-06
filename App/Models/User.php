@@ -1,6 +1,6 @@
 <?php namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Core\Database\Model;
 
 class User extends Model {
 
@@ -11,13 +11,5 @@ class User extends Model {
      */
     protected $table = 'users';
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = true;
-
+  
 }
-
-?>

@@ -12,8 +12,6 @@ define("ROOT_ASSETS", dirname(__FILE__) . DS . 'assets' . DS);
 define("ROOT_CORE", dirname(dirname(__FILE__)) . DS . 'Core' . DS);
 define("ROOT_CACHE", dirname(dirname(__FILE__)) . DS . 'Cache' . DS);
 
-date_default_timezone_set('America/Sao_Paulo');
-
 if (file_exists($autoloader = '../vendor/autoload.php')) {
     require $autoloader;
     (new Core\Application())->run();

@@ -1,5 +1,5 @@
 <?php
-namespace App\Helpers;
+namespace Core\Helpers;
 
 use Core\Lib\Controller;
 

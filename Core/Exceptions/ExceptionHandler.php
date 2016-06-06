@@ -6,10 +6,8 @@
  * Time: 11:59
  */
 
-namespace App;
+namespace Core\Exceptions;
 
-use Core\Exceptions\AuthException;
-use Core\Exceptions\RoleException;
 use Exception;
 
 class ExceptionHandler
