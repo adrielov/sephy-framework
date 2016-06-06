@@ -17,7 +17,5 @@ if (file_exists($autoloader = 'vendor/autoload.php')) {
     (new Core\Application())->run();
 
 } else {
-    
     echo "Autoloader não encontrado";
-
 }
