@@ -3,9 +3,8 @@
  * Created by PhpStorm.
  * User: William
  * Date: 21/05/2016
- * Time: 11:59
+ * Time: 11:59.
  */
-
 namespace Core\Exceptions;
 
 use Exception;
@@ -24,8 +23,8 @@ class ExceptionHandler
     {
         if ($this->exception instanceof AuthException) {
             die('Usuário deve estar logado');
-        } else if ($this->exception instanceof RoleException) {
-            die('Usuário não é do grupo' . $this->exception->getMessage());
+        } elseif ($this->exception instanceof RoleException) {
+            die('Usuário não é do grupo'.$this->exception->getMessage());
         } else {
             echo $this->exception->getMessage();
         }
