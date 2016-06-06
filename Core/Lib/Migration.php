@@ -7,8 +7,7 @@ use Illuminate\Database\Migrations\Migration as MigrationDatabase;
 
 class Migration extends MigrationDatabase {
 
-    public $schema;
-    public $application;
+    public $schema , $application;
 
     public function __construct(){
         $this->application = new Application();
