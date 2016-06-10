@@ -1,4 +1,5 @@
 <?php
+
 use Core\Router;
 
 $router = Router::getInstance();

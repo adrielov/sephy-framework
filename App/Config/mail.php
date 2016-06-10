@@ -1,13 +1,13 @@
 <?php
 
 return [
-	'smtp' => [
-		'server' => 'smtp.umbler.com',
+    'smtp' => [
+        'server' => 'smtp.umbler.com',
 
-		'port' => 587,
+        'port' => 587,
 
-		'username' => 'developer@adrielov.com.br',
+        'username' => 'developer@adrielov.com.br',
 
-		'password' => 'adriel007'
-	]
+        'password' => 'adriel007',
+    ],
 ];
