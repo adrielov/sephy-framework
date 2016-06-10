@@ -2,12 +2,12 @@
 
 return [
     'smtp' => [
-        'server' => 'smtp.umbler.com',
+        'server' => 'XXXXX',
 
         'port' => 587,
 
-        'username' => 'developer@adrielov.com.br',
+        'username' => 'XXXXX',
 
-        'password' => 'adriel007',
+        'password' => 'XXXXX',
     ],
 ];
