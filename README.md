@@ -1,4 +1,8 @@
 # Sephy-Simple-PHP-Framework
+[![StyleCI](https://styleci.io/repos/60484041/shield)](https://styleci.io/repos/60484041)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sikamy/sephy-framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sikamy/sephy-framework/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/sikamy/sephy-framework/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sikamy/sephy-framework/build-status/master)
+
 A simple php framework using MVC structure and components of Symfony and Illuminate.
 
 ## Controllers & Views (Blade)
