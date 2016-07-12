@@ -78,9 +78,9 @@ class Utils extends Controller
      */
     public function active($uri)
     {
-        if(is_array($uri)){
-            $check = (in_array(str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)),$uri));
-        }else{
+        if (is_array($uri)) {
+            $check = (in_array(str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)), $uri));
+        } else {
             $check = (str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)) == $uri);
         }
         echo ($check) ? "class='active'" : '';
