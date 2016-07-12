@@ -39,8 +39,7 @@ class View
         switch ($view_engine) {
             case 'blade':
                 $this->renderer = new BladeRenderer($paths, ['cache_path' => $view_cache]);
-                $this->renderer->addCustomCompiler('datetime', function($expression)
-                {
+                $this->renderer->addCustomCompiler('datetime', function ($expression) {
                     return "<?php echo with{$expression}->format('m/d/Y H:i'); ?>";
                 });
                 break;

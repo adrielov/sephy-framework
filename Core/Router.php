@@ -98,7 +98,7 @@ class Router
      */
     private function setMethod($httpMethod, $path, $controller, $requirements = [])
     {
-		$params = [];
+        $params = [];
         if (!is_array($httpMethod)) {
             $httpMethod = [$httpMethod];
         }
@@ -127,11 +127,11 @@ class Router
     public static function getParams()
     {
         static::includeRoutes();
-        $request    = Request::createFromGlobals();
+        $request = Request::createFromGlobals();
         $parameters = null;
-        $context    = new RequestContext();
+        $context = new RequestContext();
         $context->fromRequest($request);
-        $matcher    = new UrlMatcher(self::getInstance()->routeColletion, $context);
+        $matcher = new UrlMatcher(self::getInstance()->routeColletion, $context);
 
         try {
             $parameters = $matcher->match($request->getPathInfo());
