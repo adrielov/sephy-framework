@@ -6,58 +6,36 @@
  */
 namespace Core\Helpers;
 
+use Core\Config;
+
 class Safe
 {
-    public static $salt = 'tfju=fiM148We4oYuyojjzmA6b9UKGhQ';
+    public static $salt;
 
-    /**
-     * @param $text
-     *
-     * @return string
-     */
-    public static function encrypt($text)
-    {
-        return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, self::$salt, $text, MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND))));
+    public function __construct()
+	{
+        self::$salt = Config::get('app.salt');
     }
 
-    /**
-     * @param $text
-     *
-     * @return string
-     */
-    public static function decrypt($text)
+	/**
+	 * @param $string
+	 *
+	 * @return bool|string
+	 */
+	public static function hash($string)
     {
-        return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, self::$salt, base64_decode($text), MCRYPT_MODE_ECB, mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_ECB), MCRYPT_RAND)));
+        return password_hash($string, PASSWORD_DEFAULT);
     }
 
-    /**
-     * @param $value
-     *
-     * @return bool|string
-     */
-    public static function hashEncode($value)
-    {
-        return password_hash($value, PASSWORD_DEFAULT);
-    }
+	/**
+	 * @param $string
+	 * @param $hash
+	 *
+	 * @return bool
+	 */
+	public static function validate($string, $hash)
+	{
+		return password_verify($string, $hash);
+	}
 
-    /**
-     * @param $array
-     */
-    public static function secure(&$array)
-    {
-        if (isset($array)) {
-            foreach ($array as $key => $value) {
-                if (is_array($array[$key])) {
-                    self::secure($array[$key]);
-                } else {
-                    $array[$key] = trim($array[$key]);
-                    $array[$key] = htmlspecialchars($array[$key], ENT_QUOTES, 'UTF-8');
-                    $array[$key] = strip_tags($array[$key]);
-                    $array[$key] = addslashes($array[$key]);
-                    $array[$key] = filter_var($array[$key], FILTER_SANITIZE_STRING);
-                    $array[$key] = html_entity_decode($array[$key], ENT_COMPAT, 'UTF-8');
-                }
-            }
-        }
-    }
 }

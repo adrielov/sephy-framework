@@ -15,5 +15,5 @@ class Model extends EloquetModel
      *
      * @var bool
      */
-    public $timestamps = true;
+    public $timestamps = false;
 }

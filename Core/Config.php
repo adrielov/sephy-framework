@@ -62,20 +62,27 @@ class Config
         }
     }
 
-    /**
+	/**
      * @return array
      */
     public function make()
     {
-        $view = include $this->config_path.'views.php';
-        $app = include $this->config_path.'app.php';
-        $database = include $this->config_path.'database.php';
-        $mail = include $this->config_path.'mail.php';
-        $this->config_array['views'] = $view;
-        $this->config_array['app'] = $app;
-        $this->config_array['database'] = $database;
-        $this->config_array['mail'] = $mail;
-
+        $filesConfig = array(
+            'views',
+            'app',
+            'database',
+            'mail',
+            'middlewares'
+        );
+        foreach ($filesConfig as $config){
+            $getFileConfig = $this->config_path.$config.'.php';
+            if(file_exists($getFileConfig)){
+                $getConfig = include $getFileConfig;
+                $this->config_array[$config] = $getConfig;
+            }else{
+                exit("Configuration file <b>{$getFileConfig}</b> not found!");
+            }
+        }
         return $this->config_array;
     }
 }

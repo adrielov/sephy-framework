@@ -78,7 +78,12 @@ class Utils extends Controller
      */
     public function active($uri)
     {
-        echo (str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)) == $uri) ? "class='active'" : '';
+        if(is_array($uri)){
+            $check = (in_array(str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)),$uri));
+        }else{
+            $check = (str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)) == $uri);
+        }
+        echo ($check) ? "class='active'" : '';
     }
 
     /**
@@ -100,7 +105,6 @@ class Utils extends Controller
      */
     public static function formatDate($key)
     {
-        $now = Carbon::now();
         $createdAt = Carbon::parse($key);
         $now = $createdAt->format('d/m/Y');
 
@@ -115,151 +119,5 @@ class Utils extends Controller
     public static function formatMoney($value)
     {
         return number_format($value, 2, ',', '.');
-    }
-
-    /**
-     * @param       $data
-     * @param       $key
-     * @param       $iv
-     * @param array $settings
-     *
-     * @return mixed
-     */
-    public static function encrypt($data, $key, $iv, $settings = [])
-    {
-        if ($data === '' || !extension_loaded('mcrypt')) {
-            return $data;
-        }
-
-        //Merge settings with defaults
-        $defaults = [
-            'algorithm' => MCRYPT_RIJNDAEL_256,
-            'mode'      => MCRYPT_MODE_CBC,
-        ];
-        $settings = array_merge($defaults, $settings);
-
-        //Get module
-        $module = mcrypt_module_open($settings['algorithm'], '', $settings['mode'], '');
-
-        //Validate IV
-        $ivSize = mcrypt_enc_get_iv_size($module);
-        if (strlen($iv) > $ivSize) {
-            $iv = substr($iv, 0, $ivSize);
-        }
-
-        //Validate key
-        $keySize = mcrypt_enc_get_key_size($module);
-        if (strlen($key) > $keySize) {
-            $key = substr($key, 0, $keySize);
-        }
-
-        //Encrypt value
-        mcrypt_generic_init($module, $key, $iv);
-        $res = @mcrypt_generic($module, $data);
-        mcrypt_generic_deinit($module);
-
-        return $res;
-    }
-
-    public static function setDebug($exceptionCode)
-    {
-        $exception = null;
-        switch ($exceptionCode) {
-            case 23000: $exception = 'Erro ao inserir os dados!'; break;
-        }
-        $print = "<div class='debug'>";
-        $print .= $exception;
-        $print .= '</div>';
-        self::getInstance()->debug = $print;
-    }
-
-    public static function getDebug()
-    {
-        echo self::getInstance()->debug;
-    }
-
-    /**
-     * @param int $length
-     *
-     * @return string
-     */
-    public static function generateToken($length = 20)
-    {
-        if (function_exists('openssl_random_pseudo_bytes')) {
-            $token = base64_encode(openssl_random_pseudo_bytes($length, $strong));
-            if ($strong == true) {
-                return strtr(substr($token, 0, $length), '+/=', '-_,');
-            }
-        }
-
-        $characters = '0123456789';
-        $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        $charactersLength = strlen($characters) - 1;
-        $token = '';
-
-        for ($i = 0; $i < $length; $i++) {
-            $token .= $characters[mt_rand(0, $charactersLength)];
-        }
-
-        return $token;
-    }
-
-    /**
-     * @param       $data
-     * @param       $key
-     * @param       $iv
-     * @param array $settings
-     *
-     * @return mixed
-     */
-    public static function decrypt($data, $key, $iv, $settings = [])
-    {
-        if ($data === '' || !extension_loaded('mcrypt')) {
-            return $data;
-        }
-
-        //Merge settings with defaults
-        $defaults = [
-            'algorithm' => MCRYPT_RIJNDAEL_256,
-            'mode'      => MCRYPT_MODE_CBC,
-        ];
-        $settings = array_merge($defaults, $settings);
-
-        //Get module
-        $module = mcrypt_module_open($settings['algorithm'], '', $settings['mode'], '');
-
-        //Validate IV
-        $ivSize = mcrypt_enc_get_iv_size($module);
-        if (strlen($iv) > $ivSize) {
-            $iv = substr($iv, 0, $ivSize);
-        }
-
-        //Validate key
-        $keySize = mcrypt_enc_get_key_size($module);
-        if (strlen($key) > $keySize) {
-            $key = substr($key, 0, $keySize);
-        }
-
-        //Decrypt value
-        mcrypt_generic_init($module, $key, $iv);
-        $decryptedData = @mdecrypt_generic($module, $data);
-        $res = rtrim($decryptedData, "\0");
-        mcrypt_generic_deinit($module);
-
-        return $res;
-    }
-
-    /**
-     * @param $expires
-     * @param $secret
-     *
-     * @return mixed
-     */
-    private static function getIv($expires, $secret)
-    {
-        $data1 = hash_hmac('sha1', 'a'.$expires.'b', $secret);
-        $data2 = hash_hmac('sha1', 'z'.$expires.'y', $secret);
-
-        return pack('h*', $data1.$data2);
     }
 }

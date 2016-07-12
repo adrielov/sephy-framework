@@ -2,8 +2,11 @@
 
 namespace Core\Exceptions;
 
+use Core\Config;
+use Core\Error;
 use Exception;
 use Invoker\Exception\NotCallableException;
+use PDOException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class ExceptionHandler
@@ -19,14 +22,15 @@ class ExceptionHandler
     public function handle()
     {
         if ($this->exception instanceof AuthException) {
-            die('User must be logged in');
+			Error::log($this->exception);
         } elseif ($this->exception instanceof NotCallableException) {
-            die('Method not found');
-        }
-        if ($this->exception instanceof MethodNotAllowedException) {
-            die('Not allowed');
+			Error::log($this->exception);
+        } elseif ($this->exception instanceof PDOException) {
+            Error::log($this->exception);
+		} elseif ($this->exception instanceof MethodNotAllowedException) {
+			Error::log($this->exception);
         } else {
-            echo $this->exception->getMessage();
+			Error::log($this->exception);
         }
     }
 }

@@ -55,9 +55,9 @@ class Router
      * @param       $controller
      * @param array $params
      */
-    public function add($path, $controller, $params = [])
+    public function add($path, $controller, $requirements = [])
     {
-        $this->setMethod(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'PATCH'], $path, $controller, $params);
+        $this->setMethod(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'PATCH'], $path, $controller, $requirements);
     }
 
     /**
@@ -65,9 +65,9 @@ class Router
      * @param       $controller
      * @param array $params
      */
-    public function get($path, $controller, $params = [])
+    public function get($path, $controller, $requirements = [])
     {
-        $this->setMethod('GET', $path, $controller, $params);
+        $this->setMethod('GET', $path, $controller, $requirements);
     }
 
     /**
@@ -75,9 +75,9 @@ class Router
      * @param       $controller
      * @param array $params
      */
-    public function post($path, $controller, $params = [])
+    public function post($path, $controller, $requirements = [])
     {
-        $this->setMethod('POST', $path, $controller, $params);
+        $this->setMethod('POST', $path, $controller, $requirements);
     }
 
     /**
@@ -85,9 +85,9 @@ class Router
      * @param       $controller
      * @param array $params
      */
-    public function put($path, $controller, $params = [])
+    public function put($path, $controller, $requirements = [])
     {
-        $this->setMethod('PUT', $path, $controller, $params);
+        $this->setMethod('PUT', $path, $controller, $requirements);
     }
 
     /**
@@ -96,8 +96,9 @@ class Router
      * @param       $controller
      * @param array $params
      */
-    private function setMethod($httpMethod, $path, $controller, $params = [])
+    private function setMethod($httpMethod, $path, $controller, $requirements = [])
     {
+		$params = [];
         if (!is_array($httpMethod)) {
             $httpMethod = [$httpMethod];
         }
@@ -115,7 +116,7 @@ class Router
             $configsParams['_middleware'] = $this->middlewares;
         }
 
-        $route = new Route($prefixedPath, $configsParams);
+        $route = new Route($prefixedPath, $configsParams, $requirements);
         $route->setMethods($httpMethod);
         $this->routeColletion->add(implode('', $httpMethod).$prefixedPath, $route);
     }
@@ -126,14 +127,14 @@ class Router
     public static function getParams()
     {
         static::includeRoutes();
-
+        $request    = Request::createFromGlobals();
         $parameters = null;
-        $context = new RequestContext();
-        $context->fromRequest(Request::createFromGlobals());
-        $matcher = new UrlMatcher(self::getInstance()->routeColletion, $context);
+        $context    = new RequestContext();
+        $context->fromRequest($request);
+        $matcher    = new UrlMatcher(self::getInstance()->routeColletion, $context);
 
         try {
-            $parameters = $matcher->match(Request::createFromGlobals()->getPathInfo());
+            $parameters = $matcher->match($request->getPathInfo());
         } catch (ResourceNotFoundException $e) {
             $parameters = [
                 '_path'       => $_SERVER['REQUEST_URI'],

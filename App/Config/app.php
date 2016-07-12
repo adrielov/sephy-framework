@@ -1,11 +1,17 @@
 <?php
 
 return [
-    'title' => 'Sephy',
+    'title' 	=> 'Sephy',
 
-    'assets' => 'http://framework.com.br/assets',
+    'base'		=> 'http://framework.com.br/',
 
-    'timezone' => 'America/Sao_Paulo',
+    'assets' 	=> 'http://framework.com.br/assets',
 
-    'cache' => true,
+	'enviroment'=> 'development', // development or production
+	
+    'timezone' 	=> 'America/Sao_Paulo',
+
+    'cache' 	=> true,
+
+	'salt'		=> 'tfju=fiM148We4oYuyojjzmA6b9UKGhQ'
 ];

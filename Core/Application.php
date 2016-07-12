@@ -3,18 +3,17 @@
 namespace Core;
 
 use Core\Exceptions\ExceptionHandler;
+use Core\Lib\Session;
 use DI\ContainerBuilder;
 use Exception;
-use Illuminate\Cache\CacheManager as CacheManager;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class Application
 {
     public $capsuleDb = [];
-    public $cache , $session , $di;
+    public $session , $di;
     private static $instance;
 
     public function __construct()
@@ -30,9 +29,9 @@ class Application
             $this->capsuleDb->bootEloquent();
             $this->capsuleDb->setAsGlobal();
             $this->db = $this->capsuleDb->getConnection();
-        } catch (\PDOException $exc) {
-            die('Database '.Config::get('database.providers.pdo.database').' not found');
-        }
+        }catch (Exception $e) {
+			new ExceptionHandler($e);
+		}
     }
 
     /**
@@ -47,32 +46,12 @@ class Application
         return self::$instance;
     }
 
-    /**
-     * @return CacheManager
-     */
-    public function cache()
-    {
-        return $this->cache;
-    }
-
-    /**
-     * @return Session
-     */
-    public function session()
-    {
-        return $this->session;
-    }
-
-    /**
+	/**
      * @param $url
-     *
-     * @return mixed
      */
     public function redirect($url)
     {
-        $url = str_replace('.', DS, $url);
-
-        return header('location: /'.$url);
+        return header('location: /'.str_replace('.', DS, $url));
     }
 
     /**
@@ -85,7 +64,8 @@ class Application
 
             static::stripTraillingSlash();
 
-            $this->session()->start();
+
+            $this->session->start();
 
             Router::init();
 
@@ -126,7 +106,7 @@ class Application
         if (array_key_exists('_middleware', $routerParams)) {
             $middlewaresList = [];
             foreach ($routerParams['_middleware'] as $middlewareGroup) {
-                $configMiddleware = Config::get('middleware');
+                $configMiddleware = Config::get('middlewares');
                 if (isset($configMiddleware[$middlewareGroup])) {
                     $middlewaresList = array_merge($middlewaresList, $configMiddleware[$middlewareGroup]);
                 }

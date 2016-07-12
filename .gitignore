@@ -1,4 +1,5 @@
 .idea
 # Framework specific
 vendor/
+App/Cache/
 composer.lock

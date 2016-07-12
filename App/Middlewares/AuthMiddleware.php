@@ -9,7 +9,7 @@ class AuthMiddleware extends BaseMiddleware
      */
     public function handle()
     {
-        if ($logged = false) {
+        if ($logged = true) {
             throw new \Exception('Must be logged in');
         }
 
