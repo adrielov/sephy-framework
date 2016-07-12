@@ -23,17 +23,17 @@ class HomeController extends Controller
 ```
   $router->add('/', 'HomeController::index');
   $router->get('/profile', 'UserController::profile');
-  $router->post('/profile/{id}', 'UserController::profile');
+  $router->get('/profile/{id}', 'UserController::profile',[
+	'id' => '[0-9]'
+  ]);
+
 ```
 ## Route Groups Prefix
-The prefix group attribute may be used to prefix each route in the group with a given URI. 
+The prefix group attribute may be used to prefix each route in the group with a given URI, like /dashboard/home
 ```
 $router->prefix('dashboard', function (Core\Router $router) {
-    $router->group(['middleware' => ['auth']],function (Core\Router $router) {
-    
         $router->add('/home', 'DashboardController::index');
-        
-    });
+        $router->add('/config', 'DashboardController::config');
 });
 ```
 ## Route Groups & Middleware
