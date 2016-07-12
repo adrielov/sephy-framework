@@ -29,9 +29,9 @@ class Application
             $this->capsuleDb->bootEloquent();
             $this->capsuleDb->setAsGlobal();
             $this->db = $this->capsuleDb->getConnection();
-        }catch (Exception $e) {
-			new ExceptionHandler($e);
-		}
+        } catch (Exception $e) {
+            new ExceptionHandler($e);
+        }
     }
 
     /**
@@ -46,7 +46,7 @@ class Application
         return self::$instance;
     }
 
-	/**
+    /**
      * @param $url
      */
     public function redirect($url)

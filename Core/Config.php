@@ -62,27 +62,28 @@ class Config
         }
     }
 
-	/**
+    /**
      * @return array
      */
     public function make()
     {
-        $filesConfig = array(
+        $filesConfig = [
             'views',
             'app',
             'database',
             'mail',
-            'middlewares'
-        );
-        foreach ($filesConfig as $config){
+            'middlewares',
+        ];
+        foreach ($filesConfig as $config) {
             $getFileConfig = $this->config_path.$config.'.php';
-            if(file_exists($getFileConfig)){
+            if (file_exists($getFileConfig)) {
                 $getConfig = include $getFileConfig;
                 $this->config_array[$config] = $getConfig;
-            }else{
+            } else {
                 exit("Configuration file <b>{$getFileConfig}</b> not found!");
             }
         }
+
         return $this->config_array;
     }
 }
