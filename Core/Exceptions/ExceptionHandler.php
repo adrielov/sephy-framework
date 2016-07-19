@@ -10,11 +10,11 @@ use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class ExceptionHandler
 {
-    private $exception;
+    public $exception;
 
-    public function __construct(Exception $e)
+    public function __construct(Exception $exc)
     {
-        $this->exception = $e;
+        $this->exception = $exc;
         $this->handle();
     }
 
@@ -27,8 +27,6 @@ class ExceptionHandler
         } elseif ($this->exception instanceof PDOException) {
             Error::log($this->exception);
 		} elseif ($this->exception instanceof MethodNotAllowedException) {
-			Error::log($this->exception);
-        } else {
 			Error::log($this->exception);
         }
     }

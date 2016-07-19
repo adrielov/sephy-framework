@@ -18,7 +18,6 @@ class Error
 		} else {
 			self::logProduction($ex);
 		}
-		die();
 	}
 
 	/**

@@ -40,7 +40,6 @@ class Config
         foreach ($keys as $key) {
             $tmp = isset($tmp[$key]) ? $tmp[$key] : null;
         }
-
         return $tmp;
     }
 
@@ -56,10 +55,6 @@ class Config
                 {
                     $getConfig = include $getFileConfig;
                     $this->config_array[str_replace('.php', '', $config)] = $getConfig;
-                }
-                else
-                {
-                    exit("Configuration file <b>{$getFileConfig}</b> not found!");
                 }
             }
         }
