@@ -1,19 +1,19 @@
 <?php
 
 return [
-    'title' 	=> 'Sephy',
+    'title'    => 'Sephy',
 
-    'base'		=> 'http://sephy.com.br/',
+    'base'        => 'http://sephy.com.br/',
 
-    'assets' 	=> 'http://sephy.com.br/assets',
+    'assets'    => 'http://sephy.com.br/assets',
 
-	'enviroment'=> 'development', // development or production
-	
-    'timezone' 	=> 'America/Sao_Paulo',
+    'enviroment' => 'development', // development or production
 
-    'cache' 	=> true,
+    'timezone'    => 'America/Sao_Paulo',
 
-    'debug' 	=> true,
+    'cache'    => true,
 
-	'salt'		=> 'tfju=fiM148We4oYuyojjzmA6b9UKGhQ'
+    'debug'    => true,
+
+    'salt'        => 'tfju=fiM148We4oYuyojjzmA6b9UKGhQ',
 ];

@@ -20,6 +20,7 @@ class DB extends Capsule
         if (!self::$instance) {
             self::$instance = (new Capsule());
         }
+
         return self::$instance;
     }
 }
