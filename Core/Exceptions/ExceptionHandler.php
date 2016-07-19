@@ -21,15 +21,15 @@ class ExceptionHandler
     public function handle()
     {
         if ($this->exception instanceof AuthException) {
-			Error::log($this->exception);
+            Error::log($this->exception);
         } elseif ($this->exception instanceof NotCallableException) {
-			Error::log($this->exception);
+            Error::log($this->exception);
         } elseif ($this->exception instanceof PDOException) {
             Error::log($this->exception);
-		} elseif ($this->exception instanceof MethodNotAllowedException) {
-			Error::log($this->exception);
+        } elseif ($this->exception instanceof MethodNotAllowedException) {
+            Error::log($this->exception);
         } else {
-			Error::log($this->exception);
+            Error::log($this->exception);
         }
     }
 }

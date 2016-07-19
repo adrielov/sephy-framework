@@ -22,15 +22,16 @@ class View
         if (!self::$intance) {
             self::$intance = (new self());
         }
+
         return self::$intance;
     }
 
     public function __construct()
     {
         $config = Config::getInstance();
-        $view_engine  = $config->get('views.engine');
-        $view_folder  = $config->get('views.path_views');
-        $view_cache   = $config->get('views.path_cache');
+        $view_engine = $config->get('views.engine');
+        $view_folder = $config->get('views.path_views');
+        $view_cache = $config->get('views.path_cache');
 
         $paths = new \SplPriorityQueue();
         $paths->insert($view_folder, 100);

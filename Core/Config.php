@@ -5,7 +5,8 @@ namespace Core;
 class Config
 {
     private static $instance;
-    private $config_array , $config_path;
+    private $config_array;
+    private $config_path;
 
     public function __construct()
     {
@@ -19,16 +20,17 @@ class Config
         if (!self::$instance) {
             self::$instance = (new self());
         }
+
         return self::$instance;
     }
 
     public function set($config, $value = null)
     {
-        if(is_array($config)){
+        if (is_array($config)) {
             foreach ($config as $key => $value) {
                 $this->config_array[$key] = $value;
             }
-        }else{
+        } else {
             $this->config_array[$config] = $value;
         }
     }
@@ -47,22 +49,18 @@ class Config
     public function make()
     {
         $configs = scandir($this->config_path);
-        foreach ($configs as $config)
-        {
-            if (!in_array($config, ['.', '..']))
-            {
+        foreach ($configs as $config) {
+            if (!in_array($config, ['.', '..'])) {
                 $getFileConfig = $this->config_path.$config;
-                if(file_exists($getFileConfig))
-                {
+                if (file_exists($getFileConfig)) {
                     $getConfig = include $getFileConfig;
                     $this->config_array[str_replace('.php', '', $config)] = $getConfig;
-                }
-                else
-                {
+                } else {
                     exit("Configuration file <b>{$getFileConfig}</b> not found!");
                 }
             }
         }
+
         return $this->config_array;
     }
 }

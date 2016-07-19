@@ -3,7 +3,6 @@
 namespace Core\Helpers;
 
 use Carbon\Carbon;
-use Core\Lib\Controller;
 
 class Utils
 {
@@ -36,9 +35,9 @@ class Utils
 
     public static function active($uri)
     {
-        if(is_array($uri)){
-            $check = (in_array(str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)),$uri));
-        }else{
+        if (is_array($uri)) {
+            $check = (in_array(str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)), $uri));
+        } else {
             $check = (str_replace('/', '.', substr($_SERVER['REQUEST_URI'], 1)) == $uri);
         }
         echo ($check) ? 'class="active"' : '';
