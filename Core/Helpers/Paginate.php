@@ -6,7 +6,12 @@ use Core\Lib\Controller;
 
 class Paginate extends Controller
 {
-    public $perPage, $currentPage, $total , $maxPage , $items , $skip;
+    public $perPage;
+    public $currentPage;
+    public $total;
+    public $maxPage;
+    public $items;
+    public $skip;
 
     /**
      * Paginate constructor.

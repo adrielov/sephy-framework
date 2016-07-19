@@ -14,20 +14,25 @@ use Illuminate\Http\Response;
 
 class Application
 {
-	protected $di_builder;
-	private static $instance;
+    protected $di_builder;
+    private static $instance;
     public $capsuleDb = [];
-    public $session , $di , $request, $config , $response , $params;
+    public $session;
+    public $di;
+    public $request;
+    public $config;
+    public $response;
+    public $params;
 
     public function __construct()
     {
-		$this->session 		= (new Session);
-		$this->request 		= (new Request);
-		$this->config 		= (new Config);
-		$this->response 	= (new Response);
-		$this->di_builder 	= (new ContainerBuilder);
+        $this->session = (new Session());
+        $this->request = (new Request());
+        $this->config = (new Config());
+        $this->response = (new Response());
+        $this->di_builder = (new ContainerBuilder());
 
-		$this->di_builder->useAutowiring(true);
+        $this->di_builder->useAutowiring(true);
         $this->di = $this->di_builder->build();
 
         try {
@@ -37,9 +42,9 @@ class Application
             $this->capsuleDb->bootEloquent();
             $this->capsuleDb->setAsGlobal();
             $this->db = $this->capsuleDb->getConnection();
-        }catch (Exception $e) {
-			new ExceptionHandler($e);
-		}
+        } catch (Exception $e) {
+            new ExceptionHandler($e);
+        }
     }
 
     public static function getInstance()
@@ -53,15 +58,14 @@ class Application
 
     public function run()
     {
-		error_reporting((Config::get('app.debug'))?E_ALL:0);
-		//Set Date Timezone
-		date_default_timezone_set(Config::get('app.timezone'));
+        error_reporting((Config::get('app.debug')) ? E_ALL : 0);
+        //Set Date Timezone
+        date_default_timezone_set(Config::get('app.timezone'));
 
-		//Set Cache Ctatus
-		ini_set('opcache.revalidate_freq', (Config::get('app.cache'))?'0':'1');
+        //Set Cache Ctatus
+        ini_set('opcache.revalidate_freq', (Config::get('app.cache')) ? '0' : '1');
 
         try {
-
             static::stripTraillingSlash();
 
             $this->session->start();
@@ -100,17 +104,17 @@ class Application
     private function handleMiddlewares($routerParams)
     {
         if (array_key_exists('_middleware', $routerParams)) {
-            $middlewaresList 	= [];
-			$configMiddleware 	= Config::get('middlewares');
-			foreach ($routerParams['_middleware'] as $middlewareGroup) {
+            $middlewaresList = [];
+            $configMiddleware = Config::get('middlewares');
+            foreach ($routerParams['_middleware'] as $middlewareGroup) {
                 if (isset($configMiddleware[$middlewareGroup])) {
                     $middlewaresList = array_merge($middlewaresList, $configMiddleware[$middlewareGroup]);
                 }
             }
 
-            $middlewaresList 	= array_reverse($middlewaresList);
-            $middlewareObjects 	= [];
-            $lastMiddleware 	= null;
+            $middlewaresList = array_reverse($middlewaresList);
+            $middlewareObjects = [];
+            $lastMiddleware = null;
 
             foreach ($middlewaresList as $middleware) {
                 $md = new $middleware($lastMiddleware);

@@ -2,17 +2,17 @@
 
 namespace App\Controllers;
 
-use Core\Config;
 use Core\Lib\Controller;
-
 
 class HomeController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return $this->view('home.index');
     }
 
-    public function subpage() {
+    public function subpage()
+    {
         $this->params['title'] = 'Sephy - Simple PHP Framework - Sub Page';
 
         return $this->view('home.subpage', $this->params);

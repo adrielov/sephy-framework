@@ -13,18 +13,17 @@ class Safe
     public static $salt;
 
     public function __construct()
-	{
+    {
         self::$salt = Config::get('app.salt');
     }
 
-	public static function hash($string)
+    public static function hash($string)
     {
         return password_hash($string, PASSWORD_DEFAULT);
     }
 
-	public static function validate($string, $hash)
-	{
-		return password_verify($string, $hash);
-	}
-
+    public static function validate($string, $hash)
+    {
+        return password_verify($string, $hash);
+    }
 }

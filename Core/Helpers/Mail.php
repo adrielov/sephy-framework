@@ -15,7 +15,7 @@ class Mail
             ->setUsername(Config::get('smtp.username'))
             ->setPassword(Config::get('smtp.password'));
 
-        $mailer  = Swift_Mailer::newInstance($transport);
+        $mailer = Swift_Mailer::newInstance($transport);
         $message = Swift_Message::newInstance($data['subject'])
             ->setFrom([Config::get('smtp.username') => Config::get('framework.title')])
             ->setTo([$data['to']])
