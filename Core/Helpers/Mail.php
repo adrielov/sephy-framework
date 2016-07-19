@@ -9,32 +9,13 @@ use Swift_SmtpTransport;
 
 class Mail
 {
-    private static $instance;
-
-    /**
-     * @return Mail
-     */
-    public static function getInstance()
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    /**
-     * @param $data
-     *
-     * @return int
-     */
     public static function sendMail($data)
     {
         $transport = Swift_SmtpTransport::newInstance(Config::get('smtp.server'), Config::get('smtp.port'))
             ->setUsername(Config::get('smtp.username'))
             ->setPassword(Config::get('smtp.password'));
 
-        $mailer = Swift_Mailer::newInstance($transport);
+        $mailer  = Swift_Mailer::newInstance($transport);
         $message = Swift_Message::newInstance($data['subject'])
             ->setFrom([Config::get('smtp.username') => Config::get('framework.title')])
             ->setTo([$data['to']])

@@ -16,4 +16,6 @@ class Model extends EloquetModel
      * @var bool
      */
     public $timestamps = false;
+
+    protected $guarded = array();
 }

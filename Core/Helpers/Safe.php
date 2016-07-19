@@ -17,22 +17,11 @@ class Safe
         self::$salt = Config::get('app.salt');
     }
 
-	/**
-	 * @param $string
-	 *
-	 * @return bool|string
-	 */
 	public static function hash($string)
     {
         return password_hash($string, PASSWORD_DEFAULT);
     }
 
-	/**
-	 * @param $string
-	 * @param $hash
-	 *
-	 * @return bool
-	 */
 	public static function validate($string, $hash)
 	{
 		return password_verify($string, $hash);

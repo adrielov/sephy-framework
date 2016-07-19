@@ -10,26 +10,16 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DB extends Capsule
 {
-    /**
-     * @param $function
-     * @param $arguments
-     *
-     * @return mixed
-     */
     public static function __callStatic($function, $arguments)
     {
         return call_user_func_array([static::instance(), $function], $arguments);
     }
 
-    /**
-     * @return Capsule
-     */
     public static function instance()
     {
         if (!self::$instance) {
             self::$instance = (new Capsule());
         }
-
         return self::$instance;
     }
 }

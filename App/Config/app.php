@@ -3,15 +3,17 @@
 return [
     'title' 	=> 'Sephy',
 
-    'base'		=> 'http://framework.com.br/',
+    'base'		=> 'http://sephy.com.br/',
 
-    'assets' 	=> 'http://framework.com.br/assets',
+    'assets' 	=> 'http://sephy.com.br/assets',
 
 	'enviroment'=> 'development', // development or production
 	
     'timezone' 	=> 'America/Sao_Paulo',
 
     'cache' 	=> true,
+
+    'debug' 	=> true,
 
 	'salt'		=> 'tfju=fiM148We4oYuyojjzmA6b9UKGhQ'
 ];

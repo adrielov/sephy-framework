@@ -2,28 +2,36 @@
 
 namespace Core;
 
+use Core\Database\DB;
 use Core\Exceptions\ExceptionHandler;
+use Core\Lib\Request;
 use Core\Lib\Session;
 use DI\ContainerBuilder;
 use Exception;
 use Illuminate\Container\Container;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Http\Response;
 
 class Application
 {
+	protected $di_builder;
+	private static $instance;
     public $capsuleDb = [];
-    public $session , $di;
-    private static $instance;
+    public $session , $di , $request, $config , $response , $params;
 
     public function __construct()
     {
-        $di_builder = new ContainerBuilder();
-        $di_builder->useAutowiring(true);
-        $this->di = $di_builder->build();
-        $this->session = new Session();
+		$this->session 		= (new Session);
+		$this->request 		= (new Request);
+		$this->config 		= (new Config);
+		$this->response 	= (new Response);
+		$this->di_builder 	= (new ContainerBuilder);
+
+		$this->di_builder->useAutowiring(true);
+        $this->di = $this->di_builder->build();
+
         try {
-            $this->capsuleDb = new Capsule();
+            $this->capsuleDb = new DB();
             $this->capsuleDb->addConnection(Config::get('database.providers.pdo'));
             $this->capsuleDb->setEventDispatcher(new Dispatcher(new Container()));
             $this->capsuleDb->bootEloquent();
@@ -34,9 +42,6 @@ class Application
 		}
     }
 
-    /**
-     * @return Application
-     */
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
@@ -46,24 +51,18 @@ class Application
         return self::$instance;
     }
 
-	/**
-     * @param $url
-     */
-    public function redirect($url)
-    {
-        return header('location: /'.str_replace('.', DS, $url));
-    }
-
-    /**
-     * @return bool|mixed
-     */
     public function run()
     {
+		error_reporting((Config::get('app.debug'))?E_ALL:0);
+		//Set Date Timezone
+		date_default_timezone_set(Config::get('app.timezone'));
+
+		//Set Cache Ctatus
+		ini_set('opcache.revalidate_freq', (Config::get('app.cache'))?'0':'1');
+
         try {
-            date_default_timezone_set(Config::get('app.timezone'));
 
             static::stripTraillingSlash();
-
 
             $this->session->start();
 
@@ -98,23 +97,20 @@ class Application
         return true;
     }
 
-    /**
-     * @param $routerParams
-     */
     private function handleMiddlewares($routerParams)
     {
         if (array_key_exists('_middleware', $routerParams)) {
-            $middlewaresList = [];
-            foreach ($routerParams['_middleware'] as $middlewareGroup) {
-                $configMiddleware = Config::get('middlewares');
+            $middlewaresList 	= [];
+			$configMiddleware 	= Config::get('middlewares');
+			foreach ($routerParams['_middleware'] as $middlewareGroup) {
                 if (isset($configMiddleware[$middlewareGroup])) {
                     $middlewaresList = array_merge($middlewaresList, $configMiddleware[$middlewareGroup]);
                 }
             }
 
-            $middlewaresList = array_reverse($middlewaresList);
-            $middlewareObjects = [];
-            $lastMiddleware = null;
+            $middlewaresList 	= array_reverse($middlewaresList);
+            $middlewareObjects 	= [];
+            $lastMiddleware 	= null;
 
             foreach ($middlewaresList as $middleware) {
                 $md = new $middleware($lastMiddleware);

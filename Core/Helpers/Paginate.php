@@ -127,7 +127,7 @@ class Paginate extends Controller
                 echo /* @lang text */ '<li class="disabled"><a aria-label="Previous"><span aria-hidden="true">Anterior</span></a></li>';
             }
 
-            for ($i = 1; $i <= $this->getTotal(); $i++) {
+            for ($i = 1; $i <= $this->getTotal(); ++$i) {
                 $active = ($this->getCurrentPage() == $i) ? 'class="active"' : '';
 
                 echo '<li '.$active.'><a href="?page='.$i.'">'.$i.'</a></li>';

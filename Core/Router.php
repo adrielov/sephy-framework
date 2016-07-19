@@ -153,7 +153,7 @@ class Router
     {
         static $included = false;
         if (!$included) {
-            require ROOT_APP.'routes.php';
+            include ROOT_APP.'routes.php';
             $included = true;
         }
     }

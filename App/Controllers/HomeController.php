@@ -9,9 +9,7 @@ class HomeController extends Controller
 {
     public function index() {
 
-		$this->params['title'] = 'Sephy - Simple PHP Framework';
-
-        return $this->view('home.index', $this->params);
+        return $this->view('home.index');
     }
 
     public function subpage() {

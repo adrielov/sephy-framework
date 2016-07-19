@@ -9,5 +9,8 @@ namespace Core\Lib;
 
 class Request extends \Illuminate\Http\Request
 {
-	
+	public function redirect($url)
+	{
+		return header('location: /'.str_replace('.', DS, $url));
+	}
 }

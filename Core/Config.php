@@ -5,8 +5,7 @@ namespace Core;
 class Config
 {
     private static $instance;
-    private $config_array;
-    private $config_path;
+    private $config_array , $config_path;
 
     public function __construct()
     {
@@ -15,32 +14,25 @@ class Config
         $this->make();
     }
 
-    /**
-     * @return Config
-     */
     public static function getInstance()
     {
         if (!self::$instance) {
             self::$instance = (new self());
         }
-
         return self::$instance;
     }
 
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function set($key, $value)
+    public function set($config, $value = null)
     {
-        $this->config_array[$key] = $value;
+        if(is_array($config)){
+            foreach ($config as $key => $value) {
+                $this->config_array[$key] = $value;
+            }
+        }else{
+            $this->config_array[$config] = $value;
+        }
     }
 
-    /**
-     * @param $keys
-     *
-     * @return array|mixed|null
-     */
     public static function get($keys)
     {
         $keys = explode('.', $keys);
@@ -52,35 +44,23 @@ class Config
         return $tmp;
     }
 
-    /**
-     * @param $array
-     */
-    public function addConfigs($array)
-    {
-        foreach ($array as $key => $value) {
-            $this->config_array[$key] = $value;
-        }
-    }
-
-	/**
-     * @return array
-     */
     public function make()
     {
-        $filesConfig = array(
-            'views',
-            'app',
-            'database',
-            'mail',
-            'middlewares'
-        );
-        foreach ($filesConfig as $config){
-            $getFileConfig = $this->config_path.$config.'.php';
-            if(file_exists($getFileConfig)){
-                $getConfig = include $getFileConfig;
-                $this->config_array[$config] = $getConfig;
-            }else{
-                exit("Configuration file <b>{$getFileConfig}</b> not found!");
+        $configs = scandir($this->config_path);
+        foreach ($configs as $config)
+        {
+            if (!in_array($config, ['.', '..']))
+            {
+                $getFileConfig = $this->config_path.$config;
+                if(file_exists($getFileConfig))
+                {
+                    $getConfig = include $getFileConfig;
+                    $this->config_array[str_replace('.php', '', $config)] = $getConfig;
+                }
+                else
+                {
+                    exit("Configuration file <b>{$getFileConfig}</b> not found!");
+                }
             }
         }
         return $this->config_array;

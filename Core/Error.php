@@ -34,7 +34,7 @@ class Error
 		$line 		= $ex->getLine();
 		$trace 		= $ex->getTraceAsString();
 
-		$log_folder = ROOT_DIR.DS.'errors'.DS;
+		$log_folder = ROOT.DS.'errors'.DS;
 
 		$log = fopen($log_folder.'ERROS '.date('d-m-Y').'.log', 'a+');
 
@@ -63,7 +63,7 @@ class Error
 	 */
 	public static function logFile($text)
 	{
-		$log_folder = ROOT_DIR.DS.'errors'.DS;
+		$log_folder = ROOT.DS.'errors'.DS;
 		$log = fopen($log_folder.'ERROS '.date('d-m-Y').'.log', 'a+');
 
 		fwrite($log, $text.PHP_EOL);
@@ -73,7 +73,10 @@ class Error
 
 	public static function uncaughtExceptionHandler($e)
 	{
-		$trace = str_replace('#', '<hr>', $e->getTraceAsString());
+		if(Config::get('app.debug'))
+			$trace = str_replace('#', '<hr>', $e->getTraceAsString());
+		else
+			$trace = '<hr> <a href="/" class="btn btn-success ">Go to Home</a>';
 		$title = Config::get("app.title");
 		$html = /**@lang text */
 			"<html>
@@ -87,7 +90,7 @@ class Error
 					<div id=\"wrapper\">
 						<!-- Error title -->
 						<div class=\"content-group\">				
-							<h1 class=\"error-title\">OCORREU ALGUM ERRO</h1>
+							<h1 class=\"error-title\">Ops!</h1>
 							<h5>{$e->getMessage()}</h5>
 							<div style='text-align:left!important'>{$trace}</div>
 						</div>

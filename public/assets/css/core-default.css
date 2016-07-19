@@ -74,7 +74,7 @@ p {
 .btn {
     position: relative;
     outline: none;
-    display: block;
+    display: inline-block;
     margin: 30px auto;
     padding: 10px;
     font-size:14px;
@@ -87,6 +87,7 @@ p {
     color: #ecf0f1;
     transition: background-color .3s;
     max-width:200px;
+    text-align: center;
 }
 
 .btn:hover, .btn:focus {

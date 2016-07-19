@@ -22,16 +22,15 @@ class View
         if (!self::$intance) {
             self::$intance = (new self());
         }
-
         return self::$intance;
     }
 
     public function __construct()
     {
         $config = Config::getInstance();
-        $view_engine = $config->get('views.engine');
-        $view_folder = $config->get('views.path_views');
-        $view_cache = $config->get('views.path_cache');
+        $view_engine  = $config->get('views.engine');
+        $view_folder  = $config->get('views.path_views');
+        $view_cache   = $config->get('views.path_cache');
 
         $paths = new \SplPriorityQueue();
         $paths->insert($view_folder, 100);
@@ -39,10 +38,6 @@ class View
         switch ($view_engine) {
             case 'blade':
                 $this->renderer = new BladeRenderer($paths, ['cache_path' => $view_cache]);
-                $this->renderer->addCustomCompiler('datetime', function($expression)
-                {
-                    return "<?php echo with{$expression}->format('m/d/Y H:i'); ?>";
-                });
                 break;
             case 'twig':
                 $this->renderer = new TwigRenderer($paths);
@@ -58,11 +53,12 @@ class View
      *
      * @param string $view
      */
-    public function render($view = null, $params = null)
+    public static function render($view = null, $params = null)
     {
-        $params = ($params) ? $params : $this->params;
-        $view = $view ?: $this->template;
-        echo $this->renderer->render($view, $params);
+        $params = ($params) ? $params : self::getInstance()->params;
+        $view = $view ?: self::getInstance()->template;
+
+        echo self::getInstance()->renderer->render($view, $params);
     }
 
     /**

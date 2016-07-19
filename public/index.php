@@ -7,7 +7,7 @@ if (version_compare($ver = PHP_VERSION, $req = '5.5.9', '<')) {
 }
 
 define('DS', '/');
-define('ROOT_DIR', dirname(realpath(dirname(__FILE__)).DS));
+define('ROOT', dirname(realpath(dirname(__FILE__)).DS));
 define('ROOT_APP', dirname(dirname(__FILE__)).DS.'App'.DS);
 define('ROOT_ASSETS', dirname(__FILE__).DS.'assets'.DS);
 define('ROOT_CORE', dirname(dirname(__FILE__)).DS.'Core'.DS);

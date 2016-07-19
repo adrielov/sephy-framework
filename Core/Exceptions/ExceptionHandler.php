@@ -2,7 +2,6 @@
 
 namespace Core\Exceptions;
 
-use Core\Config;
 use Core\Error;
 use Exception;
 use Invoker\Exception\NotCallableException;
